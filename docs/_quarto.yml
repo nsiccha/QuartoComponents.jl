@@ -1,0 +1,24 @@
+author: "Nikolas Siccha"
+project:
+  type: website
+website:
+  title: "QuartoComponents.jl"
+  navbar:
+    search: true
+    left:
+      - text: "Overview"
+        href: index.qmd
+      - icon: github
+        href:  https://github.com/nsiccha/QuartoComponents.jl
+format: 
+    html:
+        page-layout: full
+        toc: true
+        code-tools: true
+        code-overflow: wrap
+        include-in-header:
+            text: |
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+execute:
+  cache: true
+  daemon: 60000

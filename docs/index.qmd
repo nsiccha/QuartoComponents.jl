@@ -1,0 +1,20 @@
+{{< include ../README.md >}} 
+
+## Example
+
+```{julia}
+#| echo: false
+
+using QuartoComponents, Plots 
+plotlyjs();
+
+p1 = scatter(randn(10), randn(10))
+
+p2 = scatter(randn(10), randn(10))
+
+nothing
+```
+
+```{julia}
+QuartoComponents.Tabset((;p1, p2))
+```
