@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "QuartoComponents.jl",
+    "section": "",
+    "text": "Allows programmatically generating some Quarto components, which may include GR or PlotlyJS plots. See https://nsiccha.github.io/QuartoComponents.jl/#example for an example."
+  },
+  {
+    "objectID": "index.html#current-features",
+    "href": "index.html#current-features",
+    "title": "QuartoComponents.jl",
+    "section": "Current features",
+    "text": "Current features\nAllows defining the following elements:\n\nContainer(children) (children should be iterable)\nHeading(level, content)\nDiv(header, content)\nCode(header, content)\nTabset(content) (content should support pairs(content))\n\nCurrently nothing gets exported."
+  },
+  {
+    "objectID": "index.html#current-limitations",
+    "href": "index.html#current-limitations",
+    "title": "QuartoComponents.jl",
+    "section": "Current limitations",
+    "text": "Current limitations\nI’m sure there’s a way around that, but for PlotlyJS plots to render, you have to potentially manually ensure that require.js is loaded. This can be done by adding the following to the Quarto YAML header, though I’m sure there’s a better way to do it:\nformat: \n    html:\n        include-in-header:\n            text: |\n                &lt;script src=\"https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js\" integrity=\"sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==\" crossorigin=\"anonymous\"&gt;&lt;/script&gt;"
+  },
+  {
+    "objectID": "index.html#example",
+    "href": "index.html#example",
+    "title": "QuartoComponents.jl",
+    "section": "Example",
+    "text": "Example\n\nQuartoComponents.Tabset((;p1, p2))\n\n\np1p2"
+  }
+]
