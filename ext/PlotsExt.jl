@@ -17,7 +17,7 @@ else
         mkpath(PLOTS_PATH)
         png_path = mktemp(PLOTS_PATH)[1] * ".png"
         Plots.png(x, png_path)
-        "\n![]($png_path)\n"
+        "\n![$png_path]($png_path)\n"
     catch
         string(x)
     end
