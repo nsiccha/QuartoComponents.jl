@@ -7,11 +7,12 @@ See [https://nsiccha.github.io/QuartoComponents.jl/#example](https://nsiccha.git
 
 Allows defining the following elements:
 
-* `Container(children)` (`children` should be iterable)
+* `Container(content)` (`content` should be iterable)
 * `Heading(level, content)`
 * `Div(header, content)`
 * `Code(header, content)`
 * `Tabset(content)`  (`content` should support `pairs(content)`)
+* Lazy rendering of HTML plots (see [https://nsiccha.github.io/QuartoComponents.jl/#lazy-rendering](#lazy-rendering)). This hopefully makes quarto rendering of many Plotly plots faster.
 
 Currently nothing gets exported.
 

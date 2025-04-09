@@ -4,7 +4,7 @@ using Markdown
 
 abstract type Object end
 struct Container <: Object
-    children
+    content
 end
 struct Heading <: Object 
     level
@@ -22,6 +22,8 @@ struct Tabset <: Object
     content
 end
 isijulia() = isdefined(Main, :IJulia) && Main.IJulia.inited
+islazy() = parse(Bool, get(ENV, "QUARTOCOMPONENTS_LAZY", "false"))
+islazy!(val) = ENV["QUARTOCOMPONENTS_LAZY"] = val
 prettyprint(io, args...) = print(io, pretty(args)...)
 # pretty(x::Expr) = if x.head == :macrocall
 #     pretty(x.args[2:end])
@@ -52,7 +54,7 @@ else
 end
 Base.show(io::IO, m::MIME"text/markdown", x::Object) = print(io, Markdown.parse(string(x)))
 Base.show(io::IO, x::Code) = prettyprint(io, "\n```", x.header, "\n", x.content, "\n```\n")
-Base.show(io::IO, x::Container) = for child in x.children
+Base.show(io::IO, x::Container) = for child in x.content
     prettyprint(io, child, "\n")
 end
 Base.show(io::IO, x::Heading) = prettyprint(io, repeat("#", x.level), " ", x.content, "\n\n")

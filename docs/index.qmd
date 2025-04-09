@@ -5,16 +5,32 @@
 ```{julia}
 #| echo: false
 
-using QuartoComponents, Plots 
+using QuartoComponents, Plots, Base64
 plotlyjs();
+ 
 
 p1 = scatter(randn(10), randn(10))
-
+ 
 p2 = scatter(randn(10), randn(10))
 
 nothing
 ```
 
+### Direct rendering
+
 ```{julia}
-QuartoComponents.Tabset((;p1, p2))
+QuartoComponents.islazy!(false)
+QuartoComponents.Tabset((;p1,p2))
+```
+
+### Lazy rendering
+
+Lazyness can be set internally via `QuartoComponents.islazy!` externally via the environment variable `QUARTOCOMPONENTS_LAZY` 
+
+```{julia}
+QuartoComponents.islazy!(true)
+QuartoComponents.Tabset((;p1,p2)) 
+```
+ 
+```{julia}
 ```
