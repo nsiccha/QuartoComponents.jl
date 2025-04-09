@@ -11,7 +11,7 @@
     "href": "index.html#current-features",
     "title": "QuartoComponents.jl",
     "section": "Current features",
-    "text": "Current features\nAllows defining the following elements:\n\nContainer(children) (children should be iterable)\nHeading(level, content)\nDiv(header, content)\nCode(header, content)\nTabset(content) (content should support pairs(content))\n\nCurrently nothing gets exported."
+    "text": "Current features\nAllows defining the following elements:\n\nContainer(content) (content should be iterable)\nHeading(level, content)\nDiv(header, content)\nCode(header, content)\nTabset(content) (content should support pairs(content))\nLazy rendering of HTML plots (see https://nsiccha.github.io/QuartoComponents.jl/#lazy-rendering). This hopefully makes quarto rendering of many Plotly plots faster.\n\nCurrently nothing gets exported."
   },
   {
     "objectID": "index.html#current-limitations",
@@ -25,6 +25,6 @@
     "href": "index.html#example",
     "title": "QuartoComponents.jl",
     "section": "Example",
-    "text": "Example\n\nQuartoComponents.Tabset((;p1, p2))\n\n\np1p2"
+    "text": "Example\n\nDirect rendering\n\nQuartoComponents.islazy!(false)\nQuartoComponents.Tabset((;p1,p2))\n\n\np1p2\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLazy rendering\nLazyness can be set internally via QuartoComponents.islazy! externally via the environment variable QUARTOCOMPONENTS_LAZY\n\nQuartoComponents.islazy!(true)\nQuartoComponents.Tabset((;p1,p2)) \n\n\np1p2\n\n\n\nClick or hover to load!\n\n\n\n\nClick or hover to load!"
   }
 ]
