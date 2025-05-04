@@ -34,6 +34,7 @@ pretty(x::Union{Vector,Tuple}) = begin
     rv
 end
 pretty(x::String) = x
+pretty(x::Symbol) = "`$x`"
 pretty(x::Object) = string(x)
 pretty(x) = if isijulia() && html_preferred(x)
     maybelazyhtml(x)
@@ -77,7 +78,7 @@ for(let s of document.getElementById("$element_hash").getElementsByTagName('scri
         script.src = '$quarto_path';
         this.appendChild(script);
     " onmouseover='this.click()'>
-    Click or hover to load[!]($quarto_path)
+    Click or hover to load ($(Base.format_bytes(filesize(absolute_path))))[!]($quarto_path)
     </div>
     """
 end
