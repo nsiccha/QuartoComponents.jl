@@ -1,6 +1,6 @@
 module QuartoComponents
 
-using Markdown, SHA, Base64
+using Markdown, CRC32c, Base64
 
 abstract type Object end
 struct Container <: Object
@@ -41,6 +41,7 @@ else
     string(x)
 end
 html_preferred(x) = false
+hash_function(x) = crc32c
 html_kwargs(x) = (;)
 maybelazyhtml(x; kwargs...) = if QuartoComponents.islazy()
     lazyhtml(x; kwargs...)
@@ -55,7 +56,7 @@ lazyhtml(x; kwargs...) = begin
     show(iob64_encode, MIME("text/html"), x; html_kwargs(x)..., kwargs...)
     close(iob64_encode)
     encoded_html = String(take!(io))
-    element_hash = bytes2hex(SHA.sha256(encoded_html))
+    element_hash = string(hash_function(x)(encoded_html))
     absolute_path = joinpath(ENV["QUARTO_PROJECT_ROOT"], ".QuartoComponents", "$element_hash.js")
     quarto_path = "/.QuartoComponents/$element_hash.js"
     if !isfile(absolute_path)
