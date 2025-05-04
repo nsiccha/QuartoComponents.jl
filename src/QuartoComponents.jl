@@ -1,6 +1,6 @@
 module QuartoComponents
 
-using Markdown
+using Markdown, SHA, Base64
 
 abstract type Object end
 struct Container <: Object
@@ -25,12 +25,6 @@ isijulia() = isdefined(Main, :IJulia) && Main.IJulia.inited
 islazy() = parse(Bool, get(ENV, "QUARTOCOMPONENTS_LAZY", "false"))
 islazy!(val) = ENV["QUARTOCOMPONENTS_LAZY"] = val
 prettyprint(io, args...) = print(io, pretty(args)...)
-# pretty(x::Expr) = if x.head == :macrocall
-#     pretty(x.args[2:end])
-# else
-#     Expr(x.head, pretty(x.args)...)
-# end
-# pretty(::LineNumberNode) = []
 pretty(x::Union{Vector,Tuple}) = begin
     rv = []
     for xi in x
@@ -41,17 +35,52 @@ pretty(x::Union{Vector,Tuple}) = begin
 end
 pretty(x::String) = x
 pretty(x::Object) = string(x)
-pretty(x) = if isijulia()
-    try
-        io = IOBuffer()
-        show(io, MIME("text/html"), x)
-        "\n" * replace(strip(String(take!(io))), r"\n\s+"=>"\n") * "\n"
-    catch
-        string(x)
-    end
+pretty(x) = if isijulia() && html_preferred(x)
+    maybelazyhtml(x)
 else
     string(x)
 end
+html_preferred(x) = false
+html_kwargs(x) = (;)
+maybelazyhtml(x; kwargs...) = if QuartoComponents.islazy()
+    lazyhtml(x; kwargs...)
+else
+    io = IOBuffer()
+    show(io, MIME("text/html"), x; html_kwargs(x)..., kwargs...)
+    "\n" * replace(strip(String(take!(io))), r"\n\s+"=>"\n") * "\n"
+end
+lazyhtml(x; kwargs...) = begin 
+    io = IOBuffer()
+    iob64_encode = Base64.Base64EncodePipe(io)
+    show(iob64_encode, MIME("text/html"), x; html_kwargs(x)..., kwargs...)
+    close(iob64_encode)
+    encoded_html = String(take!(io))
+    element_hash = bytes2hex(SHA.sha256(encoded_html))
+    absolute_path = joinpath(ENV["QUARTO_PROJECT_ROOT"], ".QuartoComponents", "$element_hash.js")
+    quarto_path = "/.QuartoComponents/$element_hash.js"
+    if !isfile(absolute_path)
+        mkpath(dirname(absolute_path))
+        open(absolute_path, "w") do io
+            write(io, """
+document.getElementById("$element_hash").innerHTML = window.atob("$encoded_html");
+for(let s of document.getElementById("$element_hash").getElementsByTagName('script')){eval(s.innerText);}
+""")
+        end
+    end
+    """
+    <div id="$element_hash" onclick="
+        this.onclick = '';
+        this.innerHTML = 'Loading...';
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = '$quarto_path';
+        this.appendChild(script);
+    " onmouseover='this.click()'>
+    Click or hover to load[!]($quarto_path)
+    </div>
+    """
+end
+
 Base.show(io::IO, m::MIME"text/markdown", x::Object) = print(io, Markdown.parse(string(x)))
 Base.show(io::IO, x::Code) = prettyprint(io, "\n```", x.header, "\n", x.content, "\n```\n")
 Base.show(io::IO, x::Container) = for child in x.content
