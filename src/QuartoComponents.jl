@@ -59,7 +59,7 @@ lazyhtml(x; kwargs...) = begin
     encoded_html = String(take!(io))
     element_hash = string(hash_function(x)(encoded_html))
     absolute_path = joinpath(ENV["QUARTO_PROJECT_ROOT"], ".QuartoComponents", "$element_hash.js")
-    quarto_path = "/.QuartoComponents/$element_hash.js"
+    quarto_path = relpath(absolute_path, ENV["QUARTO_DOCUMENT_PATH"])
     if !isfile(absolute_path)
         mkpath(dirname(absolute_path))
         open(absolute_path, "w") do io
